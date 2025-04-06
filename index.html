@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentiment Analysis Input</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #74ebd5, #acb6e5);
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 450px;
+        }
+        h1 {
+            font-size: 28px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #dfe6e9;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        textarea {
+            height: 100px;
+            resize: none;
+        }
+        button {
+            padding: 12px 25px;
+            background-color: #0984e3;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0652dd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sentiment Analysis Tool</h1>
+        <form id="inputForm" onsubmit="submitForm(event)">
+            <input type="text" id="name" placeholder="Enter your name" required>
+            <select id="productType" required>
+                <option value="" disabled selected>Select Product Type</option>
+    <option value="Electronic Devices">Electronic Devices</option>
+    <option value="Mechanical">Mechanical</option>
+    <option value="Computer">Computer</option>
+    <option value="Extra">Extra</option>
+    <option value="Clothing">Clothing</option>
+    <option value="Furniture">Furniture</option>
+    <option value="Appliances">Appliances</option>
+    <option value="Toys">Toys</option>
+    <option value="Software">Software</option>
+    <option value="Automotive">Automotive</option>
+    <option value="Books">Books</option>
+    <option value="Sports Equipment">Sports Equipment</option>
+            </select>
+            <textarea id="sentence" placeholder="Type your sentence here..." required></textarea>
+            <button type="submit">Analyze</button>
+        </form>
+    </div>
+
+    <script>
+        function submitForm(event) {
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+            const productType = document.getElementById('productType').value;
+            const sentence = document.getElementById('sentence').value;
+
+            // Redirect to result page with query parameters
+            window.location.href = `result.html?name=${encodeURIComponent(name)}&productType=${encodeURIComponent(productType)}&sentence=${encodeURIComponent(sentence)}`;
+        }
+    </script>
+</body>
+</html>
