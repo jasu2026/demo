@@ -98,24 +98,30 @@
         }
 
         // Submit data to Google Forms
-        function submitToGoogleForms(name, productType, sentence, sentiment) {
-            const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSfjEFPfL0PBkiA5vDbw2vrFJkAJwGJVh1gclPMilFtqARA80w/viewform'; // Replace with your Form ID
-            const formData = new FormData();
-            formData.append('entry.2004869588_sentinel', name);        // Replace with your Name field ID
-            formData.append('entry.987654321', productType); // Replace with your Product Type field ID
-            formData.append('entry.456789123', sentence);    // Replace with your Sentence field ID
-            formData.append('entry.321654987', sentiment);   // Replace with your Sentiment Result field ID
+       function submitToGoogleSheet(name, productType, sentence, sentiment) {
+    const sheetURL = "https://script.google.com/macros/s/AKfycbygQ2ewILY_8gd8_D3B9cmdGyuwLcsVZZtGrItlMIYVIAeC64Bp0z9-XvvvUdKqtWEG/execL"; // Paste the URL you got from deployment
 
-            fetch(formUrl, {
-                method: 'POST',
-                body: formData,
-                mode: 'no-cors' // Ensures it works in a browser
-            }).then(() => {
-                console.log('Data submitted to Google Forms');
-            }).catch(error => {
-                console.error('Error submitting to Google Forms:', error);
-            });
-        }
+    const data = {
+        name: name,
+        productType: productType,
+        sentence: sentence,
+        sentiment: sentiment
+    };
+
+    fetch(sheetURL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    }).then(() => {
+        console.log("Data stored in Google Sheets");
+    }).catch(err => {
+        console.error("Error:", err);
+    });
+}
+
     </script>
 </body>
 </html>
