@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentiment Analysis Result</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #74ebd5, #acb6e5);
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 450px;
+        }
+        h1 {
+            font-size: 28px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        #result {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        .positive { color: #27ae60; }
+        .negative { color: #c0392b; }
+        .neutral { color: #7f8c8d; }
+        button {
+            padding: 12px 25px;
+            background-color: #0984e3;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0652dd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sentiment Analysis Result</h1>
+        <div id="result"></div>
+        <button onclick="window.location.href='index.html'">Back</button>
+    </div>
+
+    <script>
+        // Simple lexicon for sentiment analysis
+        const positiveWords = ['happy', 'good', 'great', 'awesome', 'love', 'excellent', 'fantastic', 'wonderful'];
+        const negativeWords = ['bad', 'terrible', 'awful', 'hate', 'poor', 'horrible', 'disappointing', 'sad'];
+
+        // Get query parameters from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const name = urlParams.get('name');
+        const productType = urlParams.get('productType');
+        const sentence = urlParams.get('sentence');
+        const resultDiv = document.getElementById('result');
+
+        // Perform sentiment analysis
+        if (!sentence) {
+            resultDiv.textContent = 'No sentence provided! 😕';
+        } else {
+            const words = sentence.toLowerCase().split(/\s+/);
+            let positiveCount = 0;
+            let negativeCount = 0;
+
+            words.forEach(word => {
+                if (positiveWords.includes(word)) positiveCount++;
+                if (negativeWords.includes(word)) negativeCount++;
+            });
+
+            let sentiment;
+            if (positiveCount > negativeCount) {
+                sentiment = 'Positive 😊';
+                resultDiv.className = 'positive';
+            } else if (negativeCount > positiveCount) {
+                sentiment = 'Negative 😞';
+                resultDiv.className = 'negative';
+            } else {
+                sentiment = 'Neutral 😐';
+                resultDiv.className = 'neutral';
+            }
+
+            resultDiv.textContent = `Sentiment: ${sentiment}`;
+            submitToGoogleForms(name, productType, sentence, sentiment);
+        }
+
+        // Submit data to Google Forms
+        function submitToGoogleForms(name, productType, sentence, sentiment) {
+            const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSfjEFPfL0PBkiA5vDbw2vrFJkAJwGJVh1gclPMilFtqARA80w/viewform'; // Replace with your Form ID
+            const formData = new FormData();
+            formData.append('entry.2004869588_sentinel', name);        // Replace with your Name field ID
+            formData.append('entry.987654321', productType); // Replace with your Product Type field ID
+            formData.append('entry.456789123', sentence);    // Replace with your Sentence field ID
+            formData.append('entry.321654987', sentiment);   // Replace with your Sentiment Result field ID
+
+            fetch(formUrl, {
+                method: 'POST',
+                body: formData,
+                mode: 'no-cors' // Ensures it works in a browser
+            }).then(() => {
+                console.log('Data submitted to Google Forms');
+            }).catch(error => {
+                console.error('Error submitting to Google Forms:', error);
+            });
+        }
+    </script>
+</body>
+</html>
